@@ -9,7 +9,7 @@ const {
   createUser,
   updateUser,
   deleteUser,
-} = require('../controllers/users');
+} = require('../controllers/users.controller');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
 //

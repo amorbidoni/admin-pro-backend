@@ -18,8 +18,10 @@ app.use(express.json());
 // mean_user
 dbConection();
 // RUTAS
-app.use('/api/usuarios', require('./routes/usuarios'));
-app.use('/api/login', require('./routes/auth'));
+app.use('/api/usuarios', require('./routes/usuarios.routes'));
+app.use('/api/login', require('./routes/auth.routes'));
+app.use('/api/hospitales', require('./routes/hospitales.routes'));
+app.use('/api/medicos', require('./routes/medicos.routes'));
 
 app.listen(PORT, () => {
   console.log(`servidor corriendo en puerto ${PORT}`);
