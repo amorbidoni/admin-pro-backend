@@ -2,7 +2,24 @@ const { get } = require('mongoose');
 const { response, request } = require('express');
 const Usuario = require('../models/user');
 const bcrypt = require('bcryptjs');
+const { getJWT } = require('../helpers/jwt');
 
+//
+// check userId exist
+//
+const checkUserId = async (uid) => {
+  const usuarioDb = await Usuario.findById(uid);
+
+  if (!usuarioDb) {
+    return res.status(404).json({
+      ok: false,
+      msj: 'No existe un usuario con ese id.',
+    });
+  }
+  return;
+};
+//
+// GET USERS
 //
 const getUsers = async (req, res) => {
   const usuarios = await Usuario.find({}, 'nombre email role google');
@@ -11,7 +28,9 @@ const getUsers = async (req, res) => {
     usuarios,
   });
 };
-
+//
+// CREATE USER
+//
 const createUser = async (req, res = response) => {
   const { email, password } = req.body;
 
@@ -27,15 +46,21 @@ const createUser = async (req, res = response) => {
     // antes de guardar en la abase de datos encriptar contraseña ↓
     const salt = bcrypt.genSaltSync();
     usuario.password = bcrypt.hashSync(password, salt);
+    //
     // guardar usuario en la base de datos ↓
+
     await usuario.save();
-    res.json({ ok: true, usuario });
+
+    const token = await getJWT(usuario.id);
+    res.json({ ok: true, usuario, token });
   } catch (error) {
     res.status(500).json({ ok: flase, msj: 'Error inesperado' });
   }
 };
-
-const updateUser = async (req = request, res = response) => {
+//
+// UPDATE USER
+//
+const updateUser = async (req, res = response) => {
   // TODO: validar token y comprobar si es el usuario correcto
 
   const uid = req.params.id;
@@ -81,4 +106,32 @@ const updateUser = async (req = request, res = response) => {
     });
   }
 };
-module.exports = { getUsers, createUser, updateUser };
+//
+// DELETE USER
+//
+const deleteUser = async (req, res) => {
+  const uid = req.params.id;
+  try {
+    const userDb = await Usuario.findById(uid);
+    if (!userDb) {
+      return res.status(404).json({
+        ok: false,
+        msj: 'No se encontró un usuario con el id ingresado.',
+      });
+    }
+    await Usuario.findByIdAndDelete(uid);
+
+    res.json({
+      ok: true,
+      uid,
+    });
+  } catch (error) {
+    console.log(`Error en la petición deleteUser: ${error}`);
+    res.status(500).json({
+      ok: false,
+      msj: 'Error en la solicitud.',
+    });
+  }
+};
+
+module.exports = { getUsers, createUser, updateUser, deleteUser };
