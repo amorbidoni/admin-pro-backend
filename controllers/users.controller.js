@@ -22,11 +22,24 @@ const checkUserId = async (uid) => {
 // GET USERS
 //
 const getUsers = async (req, res) => {
-  const usuarios = await Usuario.find({}, 'nombre email role google');
+  const desde = Number(req.query.desde) || 0;
+  //DOS PROMESAS SEGUIDAS CON AWAIT PUEDE GENERAR MUCHA DEMORA SI TENEMOS QUE ESPERAR QUE SE RESUELVAN POR SEPARADO ↓
+  //
+  // const usuarios = await Usuario.find({}, 'nombre email role google')
+  //   .skip(desde)
+  //   .limit(6);
+  // const total = await Usuario.count();
+  //
+  //  AL TENER DOS PROMESAS QUE TENEMOS QEU ESPERA QUE RESUELVAN CON AWAIT CONVIENE USAR PROMISE.ALL PARA REALIZARLAS EN SIMULTANEO ↓
+  const [usuarios, total] = await Promise.all([
+    Usuario.find({}, 'nombre email role google').skip(desde).limit(6),
+    Usuario.count(),
+  ]);
+
   res.json({
     ok: true,
     usuarios,
-    uid: req.uid,
+    total,
   });
 };
 //

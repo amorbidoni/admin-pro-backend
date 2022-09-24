@@ -5,10 +5,19 @@ const Hospital = require('../models/hospital.model');
 //  GET HOSPITAL
 //
 const getHospitales = async (req, res = response) => {
-  res.json({
-    ok: true,
-    msj: 'getHospitales',
-  });
+  const hospitales = await Hospital.find().populate('usuario', 'nombre img');
+  try {
+    res.status(400).json({
+      ok: true,
+      hospitales,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msj: 'Error al solicitar hospitales',
+    });
+  }
 };
 //
 //  ADD HOSPITAL
