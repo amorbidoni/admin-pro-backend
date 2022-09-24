@@ -1,5 +1,8 @@
 const { response } = require('express');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const path = require('path');
+const { actualizarImagen } = require('../helpers/actualizar-imagen');
 const uploadDocument = (req, res = response) => {
   const tipo = req.params.tipo;
   const id = req.params.id;
@@ -50,6 +53,10 @@ const uploadDocument = (req, res = response) => {
         msj: 'Error al mover el archivo sampleFile',
       });
     }
+
+    //Actualizar base de datos
+    actualizarImagen(tipo, id, nombreArchivo);
+
     res.json({
       ok: true,
       msj: 'Archivo subido',
@@ -57,7 +64,19 @@ const uploadDocument = (req, res = response) => {
     });
   });
 };
-
+const retornaImagen = (req, res = response) => {
+  const tipo = req.params.tipo;
+  const image = req.params.image;
+  const pathImg = path.join(__dirname, `../uploads/${tipo}/${image}`);
+  // imagen por defecto
+  if (fs.existsSync(pathImg)) {
+    res.sendFile(pathImg);
+  } else {
+    const pathImg = path.join(__dirname, `../uploads/no-img.jpg`);
+    res.sendFile(pathImg);
+  }
+};
 module.exports = {
   uploadDocument,
+  retornaImagen,
 };
