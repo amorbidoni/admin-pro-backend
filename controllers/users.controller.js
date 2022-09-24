@@ -1,5 +1,4 @@
-const { get } = require('mongoose');
-const { response, request } = require('express');
+const { response } = require('express');
 const Usuario = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const { getJWT } = require('../helpers/jwt');

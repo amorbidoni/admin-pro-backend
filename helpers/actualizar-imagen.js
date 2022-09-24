@@ -62,7 +62,3 @@ const actualizarImagen = async (tipo, id, nombreArchivo) => {
 module.exports = {
   actualizarImagen,
 };
-
-// var serveIndex = require('serve-index');
-// app.use(express.static(__dirname + '/'))
-// app.use('/uploads', serveIndex(__dirname + '/uploads'));
