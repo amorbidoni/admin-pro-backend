@@ -4,20 +4,6 @@ const bcrypt = require('bcryptjs');
 const { getJWT } = require('../helpers/jwt');
 
 //
-// check userId exist
-//
-const checkUserId = async (uid) => {
-  const usuarioDb = await Usuario.findById(uid);
-
-  if (!usuarioDb) {
-    return res.status(404).json({
-      ok: false,
-      msj: 'No existe un usuario con ese id.',
-    });
-  }
-  return;
-};
-//
 // GET USERS
 //
 const getUsers = async (req, res) => {
@@ -104,7 +90,14 @@ const updateUser = async (req, res = response) => {
         });
       }
     }
-    campos.email = email;
+    if (!usuarioDb.google) {
+      campos.email = email;
+    } else if (usuarioDb.email != email) {
+      res.status(500).json({
+        ok: false,
+        msj: 'Usuarios de google no pueden cambiar el email.',
+      });
+    }
     const newUser = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
 
     res.json({

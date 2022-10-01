@@ -13,6 +13,6 @@ const { validarJWT } = require('../middlewares/validar-jwt');
 const router = Router();
 router.use(expressFileUpload());
 router.put('/:tipo/:id', validarJWT, uploadDocument);
-router.get('/:tipo/:image', validarJWT, retornaImagen);
+router.get('/:tipo/:image', retornaImagen);
 
 module.exports = router;

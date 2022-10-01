@@ -92,11 +92,30 @@ const renewToken = async (req, res = response) => {
   const uid = req.uid;
   // generar GWT
   const token = await getJWT(uid);
-  res.json({
-    ok: true,
-    uid,
-    token,
-  });
+
+  // obtener usuario
+
+  try {
+    const user = await Usuario.findById(uid);
+    if (!user) {
+      return res.status(400).json({
+        ok: false,
+        msj: 'No hay un usuario con el uid',
+      });
+    }
+    res.json({
+      ok: true,
+      uid,
+      token,
+      usuario: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msj: 'Error en la solicitud, comuniquese con el adminsitrador.',
+    });
+  }
 };
 
 module.exports = {
