@@ -17,7 +17,7 @@ const getUsers = async (req, res) => {
   //
   //  AL TENER DOS PROMESAS QUE TENEMOS QEU ESPERA QUE RESUELVAN CON AWAIT CONVIENE USAR PROMISE.ALL PARA REALIZARLAS EN SIMULTANEO ↓
   const [usuarios, total] = await Promise.all([
-    Usuario.find({}, 'nombre email role google img').skip(desde).limit(6),
+    Usuario.find({}, 'nombre email role google img').skip(desde).limit(5),
     Usuario.countDocuments(),
   ]);
 
