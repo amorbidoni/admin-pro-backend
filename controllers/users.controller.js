@@ -83,7 +83,7 @@ const updateUser = async (req, res = response) => {
     if (usuarioDb.email !== email) {
       delete campos.email;
       const existeEmail = await Usuario.findOne({ email });
-      if (existeEmail) {
+      if (existeEmail ) {
         return res.status(400).json({
           ok: false,
           msj: 'Ya exsiste un usuario con es email.',
