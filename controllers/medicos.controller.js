@@ -111,10 +111,38 @@ const deleteMedico = async (req, res = response) => {
     });
   }
 };
+// GET BY ID
+const getMedicosById = async (req, res = response) => {
+  const medicoId = req.params.id;
 
+  
+  try {  
+    
+    const medico = await  Medico.findById(medicoId).populate('usuario', 'nombre img')
+                                .populate('hospital', 'nombre');
+
+    if(!medico){
+     return res.status(500).json({
+        ok: false,
+        msj:`No hay un médico con ese id.`,
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      medico,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msj: `Error al hacer la petición getMedicosById: ${error}`,
+    });
+  }
+};
 module.exports = {
   getMedicos,
   updateMedico,
   addMedico,
-  deleteMedico,
+  deleteMedico,getMedicosById
 };
