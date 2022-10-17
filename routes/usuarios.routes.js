@@ -12,6 +12,7 @@ const {
 } = require('../controllers/users.controller');
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
+const { validarADMIN_ROLE, validarADMIN_ROLE_o_MismoUsuario } = require('../middlewares/validar-role');
 //
 
 const router = Router();
@@ -33,6 +34,7 @@ router.put(
   '/:id',
   [
     validarJWT,
+    validarADMIN_ROLE_o_MismoUsuario,
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('email', 'El email es obligatorio').isEmail(),
     check('role', 'El rol es obligatorio').not().isEmpty(),
