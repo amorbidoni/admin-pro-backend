@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const dbConection = async () => {
   try {
-    await mongoose.connect(process.env.DB_CNN, {ssl:{ "rejectUnauthorized": false }});
+    await mongoose.connect(process.env.DB_CNN, {ssl:false});
     console.log('DB online');
   } catch (error) {
     console.log(error);
