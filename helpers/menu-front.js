@@ -6,9 +6,9 @@
       subMenu: [
         { title: 'Main',        routerLink: '/',},
         { title: 'Progressbar', routerLink: './progress'},
-        { title: 'Graphics',    routerLink: './grafica1'},
         { title: 'Promises',    routerLink: './promises'},
         { title: 'RXJS',        routerLink: './rxjs'},
+
       ],
     },
     {

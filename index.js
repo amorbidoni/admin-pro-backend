@@ -28,6 +28,7 @@ app.use('/api/hospitales', require('./routes/hospitales.routes'));
 app.use('/api/medicos', require('./routes/medicos.routes'));
 app.use('/api/todo', require('./routes/busquedas.routes'));
 app.use('/api/uploads', require('./routes/uploads.routes'));
+app.use('/api/mp', require('./routes/mp.routes'));
 
 app.get('*', (req, res)=>{
   res.sendFile(path.resolve(__dirname, 'public/index.html'))
@@ -36,3 +37,4 @@ app.get('*', (req, res)=>{
 app.listen(PORT, () => {
   console.log(`servidor corriendo en puerto ${PORT}`);
 });
+
